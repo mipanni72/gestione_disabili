@@ -114,7 +114,12 @@ class Persona(db.Model):
 # Inizializza il database SOLO se non esiste
 with app.app_context():
     # Controlliamo se la tabella esiste prima di crearla
-    if not db.engine.dialect.has_table(db.engine, "persona"):
+    from sqlalchemy import inspect
+
+with app.app_context():
+    inspector = inspect(db.engine)
+    
+    if not inspector.has_table("persona"):  # ✅ Questo è il metodo corretto!
         print("⚠️ Creazione nuovo database in corso...")
         db.create_all()
         print("✅ Database creato con successo!")
