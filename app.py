@@ -25,38 +25,6 @@ def test_db_connection():
     except Exception as e:
         print(f"❌ Errore connessione database: {e}")
 
-# 🔍 **DEBUG: Stampa i dati ricevuti prima di salvarli**
-@app.route('/api/persone', methods=['POST'])
-def aggiungi_persona():
-    try:
-        data = request.get_json()
-        if not data:
-            return jsonify({'error': 'Richiesta non valida, JSON mancante'}), 400
-
-        print("📥 Dati ricevuti:", data)  # Debug dei dati ricevuti
-
-        nuova_persona = Persona(
-            nome=data.get('nome'),
-            cognome=data.get('cognome'),
-            numero_identificazione=data.get('numero_identificazione'),
-            indirizzo=data.get('indirizzo'),
-            civico=data.get('civico'),
-            citta=data.get('citta'),
-            numero_permesso=data.get('numero_permesso')
-        )
-
-        print("📝 Query da eseguire:", nuova_persona)  # Debug prima di salvare
-       
-        db.session.add(nuova_persona)
-        db.session.commit()
-        print("✅ Persona salvata con successo!")  # Conferma salvataggio
-
-        return jsonify({'message': 'Persona aggiunta con successo'}), 201
-
-    except Exception as e:
-        print(f"🔥 ERRORE nel salvataggio: {e}")  # Mostra l'errore nei log
-        return jsonify({'error': str(e)}), 500
-
 # Funzione per calcolare il Codice Fiscale
 def calcola_codice_fiscale(nome, cognome, data_nascita, sesso, citta_nascita):
     if not nome or not cognome or not data_nascita or not sesso or not citta_nascita:
